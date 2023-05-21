@@ -33,8 +33,8 @@ class Controller (object):
                  block_number = 0):
         self.xbox: XBOX = XBOX(null_value=0x0)
         self.PowerSupplier = None
-        self.capacity = 480
         self.number_of_blocks = 4
+        self.capacity = 480 * self.number_of_blocks # 480 rows per bank, and there is 4 banks.
         self.block_number = block_number
         
     def read(self,
@@ -92,11 +92,12 @@ class Controller (object):
             words_index = 0
             xbox_index = 0
             current_word = self.null_value
-            while words_index < len(self.words):
-                if self._isBulkLine(xbox_index):
+            # make it aligned for 4 words
+            while words_index < len(self.words) or (words_index % self.number_of_blocks) != 0:
+                if self._isBulkLine(xbox_index) or words_index >= len(self.words):
                     yield self.null_value
-                elif not self._indexInIntededBlock(xbox_index):
-                    yield current_word
+                # elif not self._indexInIntededBlock(xbox_index):
+                #     yield current_word
                 else:
                     yield self.words[words_index]
                     current_word = self.words[words_index]
