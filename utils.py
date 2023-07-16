@@ -258,3 +258,12 @@ def config_pll_rcg(
 
     # Remove PNX_CARP bypass   
     carp_clock_select(PNX_CARP, 1)
+
+
+#define target_pnx_clk_hz_const (1000000000.0/ATSPEED_CLK_PERIOD_NS) 
+#define target_fll_out_clk_hz_const (int)((target_pnx_clk_hz_const * PNX_CARP_DIVIDER)+0.5)
+
+def init_pll_rcg(clk_period):
+    target_pnx_clk_hz_const = int(1000000000.0/clk_period)
+    target_fll_out_clk_hz_const = int((target_pnx_clk_hz_const * PNX_CARP_DIVIDER) + 0.5)
+    config_pll_rcg(target_fll_out_clk_hz_const , PNX_CARP_DIVIDER)
