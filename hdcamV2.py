@@ -129,7 +129,7 @@ class XBOX(object):
         self.xbox_mem_base_addr = XBOX.Address.MIN_XBOX     #checked
         self.null_value = null_value                        #checked
         self.capacity: int = 2048 # of words which          #checked
-        self.serial_gateway = self._defineSerialGateway()   #checked
+        self.serial_gateway = leo2_sys.get_serial_gateway()   #checked
         self._enableHDCAMIMXWrapper()                       #checked
         self._setPowerGateOn()                              #checked
         self.hdcam_ctrl = XBOX.HDCAMCtrl(self.serial_gateway,
