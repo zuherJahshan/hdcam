@@ -34,6 +34,8 @@ def set_baudrate(
 
 
 def get_serial_gateway():
+    global glob_serial_gateway
+    
     # If already exists, return it.
     if glob_serial_gateway:
         return glob_serial_gateway
