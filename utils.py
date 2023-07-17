@@ -22,6 +22,17 @@ PNX_CARP                            = GP_RF_PNX_CLOCK_CTRL_ADDR
 
 glob_serial_gateway = None
 
+
+def set_baudrate(
+    serial_gateway,
+    target_br
+):
+    if (serial_gateway.target_baudrate != target_br):
+        print ("Changing target_baudrate to %d" % target_br)
+        serial_gateway.target_baudrate = target_br
+    serial_gateway.activate()
+
+
 def get_serial_gateway():
     # If already exists, return it.
     if glob_serial_gateway:
@@ -35,17 +46,12 @@ def get_serial_gateway():
     stdio_serial_gate = sgw.serGate()
     esc_serial_gate = sgw.serGate()
     serial_gateway = sgw.serGateWay(serial_port_name,stdio_serial_gate, esc_serial_gate)
-    target_br = 72000
-    if (serial_gateway.target_baudrate != target_br):
-        print ("Changing target_baudrate to %d" % target_br)
-        serial_gateway.target_baudrate = target_br
-    serial_gateway.activate()
+    set_baudrate(serial_gateway, 72000)
     while (serial_gateway.serPort.inWaiting()>0) : # Clear pending UART communication from device
         # ignoreChar = serial_gateway.serPort.read(1) 
         serial_gateway.gwIterate()
     glob_serial_gateway = serial_gateway
     return glob_serial_gateway
-
 
 def wr_field(
     xbox_addr: int,
